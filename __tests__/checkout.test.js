@@ -1,4 +1,4 @@
-const { scanItem, addItemToBasket, calculateBasketTotal, removeItemFromBasket } = require('../checkout.js');
+const { scanItem, SelfCheckout } = require('../checkout.js');
 
 const orange = {
     barcode: 789,
@@ -38,29 +38,30 @@ it('finds an item from the product catalogue after scanning a barcode', () => {
 });
 
 describe('Customer Shopping Basket Functionality', () => {
-    let erselsBasket;
+    let checkoutProcess;
 
     beforeEach(() => {
-        erselsBasket = [pineapple];
+        checkoutProcess = new SelfCheckout(productCatalogue);
+        checkoutProcess.addItemToBasket(pineapple);
     })
 
     it('adds an item to the shopping basket of the customer', () => {
-        expect(erselsBasket).toHaveLength(1);
-        addItemToBasket(kiwi, erselsBasket)
-        expect(erselsBasket).toHaveLength(2);
-        expect(erselsBasket[1]).toEqual(kiwi);
+        expect(checkoutProcess.basket).toHaveLength(1);
+        checkoutProcess.addItemToBasket(kiwi);
+        expect(checkoutProcess.basket).toHaveLength(2);
+        expect(checkoutProcess.basket[1]).toEqual(kiwi);
     });
     
     it('calculates total price of items in the shopping basket', () => {
-        addItemToBasket(kiwi, erselsBasket)
-        expect(calculateBasketTotal(erselsBasket)).toBe(105);
+        checkoutProcess.addItemToBasket(kiwi);
+        expect(checkoutProcess.calculateBasketTotal()).toBe(105);
     });
 
     it('removes an item from the basket', () => {
-        expect(erselsBasket).toHaveLength(1);
-        addItemToBasket(kiwi, erselsBasket)
-        removeItemFromBasket(pineapple, erselsBasket);
-        expect(erselsBasket[0]).toEqual(kiwi);
+        expect(checkoutProcess.basket).toHaveLength(1);
+        checkoutProcess.addItemToBasket(kiwi)
+        checkoutProcess.removeItemFromBasket(pineapple);
+        expect(checkoutProcess.basket[0]).toEqual(kiwi);
     })
 });
 

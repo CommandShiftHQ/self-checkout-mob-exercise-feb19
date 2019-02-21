@@ -1,23 +1,27 @@
 const scanItem = (barcodeArg, catalogue) => catalogue.find(product => product.barcode === barcodeArg);
 
-const addItemToBasket = (item, shoppingBasket) => {
-  shoppingBasket.push(item);
+
+const SelfCheckout = function(catalogue) {
+    this.catalogue = catalogue;
+    this.basket = [];
 }
 
-const calculateBasketTotal = (shoppingBasket) => {
-    return shoppingBasket.reduce((acc, item) => {
+SelfCheckout.prototype.addItemToBasket = function(item) {
+    this.basket.push(item); 
+}
+
+SelfCheckout.prototype.calculateBasketTotal = function() {
+    return this.basket.reduce((acc, item) => {
         return acc + item.price;
-    }, 0);
+    }, 0); 
 }
 
-const removeItemFromBasket = (item, shoppingBasket) => {
-    const itemIndex = shoppingBasket.indexOf(item);
-    return shoppingBasket.splice(itemIndex, 1);
+SelfCheckout.prototype.removeItemFromBasket = function (item) {
+    const itemIndex = this.basket.indexOf(item);
+    return this.basket.splice(itemIndex, 1);
 }
 
 module.exports = {
     scanItem,
-    addItemToBasket,
-    calculateBasketTotal,
-    removeItemFromBasket
+    SelfCheckout
 };
